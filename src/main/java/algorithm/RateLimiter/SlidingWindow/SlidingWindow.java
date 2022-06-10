@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class SlidingWindow extends RateLimiter {
 
-    private long g;
+    private long key;
 
     public SlidingWindow(Config config) {
         super(config.getMaxRequestPerMin());
@@ -30,7 +30,7 @@ public class SlidingWindow extends RateLimiter {
 
         curWindowKey = curTime / time * time;
 
-        g = curWindowKey;
+        key = curWindowKey;
 
         windows.putIfAbsent(curWindowKey, new AtomicInteger(0));
         long preWindowKey = curWindowKey - time;
@@ -51,7 +51,7 @@ public class SlidingWindow extends RateLimiter {
     }
     @Override
     public long getCurWindowKey(){
-        return g;
+        return key;
     }
 }
 
